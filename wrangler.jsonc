@@ -1,0 +1,11 @@
+// Only used if you deploy with Cloudflare *Workers* static assets
+// (`npx wrangler deploy`). Cloudflare *Pages* ignores this file and already
+// serves index.html for unknown paths (SPA mode) because there is no 404.html.
+{
+  "name": "classroom-survey",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  }
+}
