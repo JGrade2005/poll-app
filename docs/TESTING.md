@@ -97,7 +97,7 @@ student was tested on a separate origin, with no instructor session.
 
 - [ ] Run the migration in your Supabase project; confirm 5 tables and RLS in Table Editor
 - [ ] Production login with the instructor account
-- [ ] QR code on the projector opens the `pages.dev` URL on a phone using **mobile data**
+- [ ] QR code on the projector opens the deployed (`workers.dev`) URL on a phone using **mobile data**
 - [ ] Student submission in production; response visible in Table Editor (`responses`, `answers`)
 - [ ] Results and CSV in production; open the CSV in Excel / Google Sheets
 - [ ] A second browser (Firefox or Safari) and a real phone

@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "description": "Classroom Survey Web App: instructors create surveys, students answer by scanning a QR code.",
   "type": "module",
+  "packageManager": "npm@11.19.0",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

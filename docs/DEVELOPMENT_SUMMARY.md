@@ -94,10 +94,13 @@ in `src/lib/errors.ts`.
 
 ## 6. Deployment
 
-✏️ *Fill in after deploying.* The code is on GitHub at `<repo URL>`. Cloudflare Pages is connected to
-the repository with build command `npm run build` and output directory `dist`, and the environment
-variables `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` are set. Cloudflare serves `index.html` for
-every route, so deep links like `/s/<slug>` work. The app is live at `<https://….pages.dev>`; the
+✏️ *Fill in after deploying.* The code is on GitHub at `https://github.com/JGrade2005/poll-app`. A
+Cloudflare Worker named `poll-app` is connected to the repository (Workers Builds) with build command
+`npm run build` and deploy command `npx wrangler deploy`; `wrangler.jsonc` serves the built `dist/`
+folder as static assets. The build
+variables `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` are set. Single-page-application
+mode serves `index.html` for every route, so deep links like `/s/<slug>` work. The app is live at
+`<https://poll-app.….workers.dev>`; the
 database stays on Supabase. I verified it from a phone on mobile data by scanning the projected QR code.
 
 ## 7. What I learned about full-stack development

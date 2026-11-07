@@ -1,8 +1,10 @@
-// Only used if you deploy with Cloudflare *Workers* static assets
-// (`npx wrangler deploy`). Cloudflare *Pages* ignores this file and already
-// serves index.html for unknown paths (SPA mode) because there is no 404.html.
+// Cloudflare Workers deployment config (Workers Builds runs `npx wrangler deploy`).
+// "name" must match the Worker's name in the Cloudflare dashboard.
+// The site is static: Vite builds it into ./dist and Cloudflare serves those files.
+// "single-page-application" returns index.html for unknown paths, so links like
+// /s/abc12345 and /dashboard work when opened directly or refreshed.
 {
-  "name": "classroom-survey",
+  "name": "poll-app",
   "compatibility_date": "2026-11-01",
   "assets": {
     "directory": "./dist",

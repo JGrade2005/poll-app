@@ -6,11 +6,11 @@ counts, percentages and charts, and can export everything as CSV.
 
 - **Frontend:** React 19, TypeScript, Vite, Tailwind CSS, React Router, Recharts, `qrcode`
 - **Backend / database:** Supabase (PostgreSQL, Auth, auto-generated REST API, Row Level Security)
-- **Hosting:** Cloudflare Pages (static site); the database stays on Supabase
+- **Hosting:** Cloudflare Workers static assets (Pages also works); the database stays on Supabase
 
 | | |
 |---|---|
-| Live app | `https://<your-project>.pages.dev` ← fill in after deploying |
+| Live app | `https://poll-app.<your-subdomain>.workers.dev` ← fill in after deploying |
 | Specifications | [Classroom_Survey_Web_App_Specification.md](Classroom_Survey_Web_App_Specification.md), [DATABASE.md](DATABASE.md), [API.md](API.md), [UI.md](UI.md), [TODO.md](TODO.md) |
 | Design decisions | [docs/DESIGN_DECISIONS.md](docs/DESIGN_DECISIONS.md) |
 | Test plan & results | [docs/TESTING.md](docs/TESTING.md) |
@@ -43,7 +43,7 @@ counts, percentages and charts, and can export everything as CSV.
 ## How it works
 
 ```
- Browser (React SPA on Cloudflare Pages)
+ Browser (React SPA served by Cloudflare)
    │  supabase-js over HTTPS, publishable key + instructor JWT
    ▼
  Supabase
@@ -138,29 +138,47 @@ Open http://localhost:5173. Without the env vars the app shows a "Supabase is no
    one on the API Keys page. **Never** put a secret key (`sb_secret_…`), the legacy `service_role`
    key, or the database password in the app, the repository, or Cloudflare.
 
-## 3. Deploy to Cloudflare Pages
+## 3. Deploy to Cloudflare
+
+The app is a static site, so Cloudflare only needs to build it and serve `dist/`. The database stays
+on Supabase. Cloudflare's **Workers & Pages → Create** flow now creates a **Worker** by default; this
+repo is set up for that, with a Worker named `poll-app`.
 
 1. Push this repository to GitHub (`.env.local` is git-ignored; only `.env.example` is committed).
-2. Cloudflare Dashboard → **Workers & Pages → Create → Pages → Import an existing Git repository**,
-   then pick the repo.
-3. Build settings:
-   - Framework preset: **React (Vite)** (or None)
+2. Cloudflare Dashboard → **Workers & Pages → Create → Import a repository**, then pick the repo.
+3. Build settings (**Settings → Build** on the Worker):
    - Build command: `npm run build`
-   - Build output directory: `dist`
-4. **Environment variables** (Settings → Variables and Secrets, for **Production** and **Preview**):
-   - `VITE_SUPABASE_URL` = your project URL
+   - Deploy command: `npx wrangler deploy` (the default)
+   - Root directory: leave empty
+4. **The Worker's name must match `"name"` in [`wrangler.jsonc`](wrangler.jsonc)** (currently
+   `poll-app`). If you name the Worker something else, change that line to match.
+5. **Variables for the build.** Vite bakes these into the JavaScript at **build** time, so add them as
+   *build* variables (Settings → Build → **Variables and secrets**), not only as runtime variables:
+   - `VITE_SUPABASE_URL` = your Project URL
    - `VITE_SUPABASE_PUBLISHABLE_KEY` = your publishable key (`sb_publishable_…`)
-   - optional `VITE_PUBLIC_SITE_URL` = `https://<your-project>.pages.dev` (QR base URL; defaults to the
-     address the app is opened from)
+   - optional `VITE_PUBLIC_SITE_URL` = your public URL (QR base URL; defaults to the address the app
+     is opened from)
 
-   These are read at **build** time, so redeploy after changing them.
-5. Deploy. Routing needs no extra config: with no `404.html`, Cloudflare Pages serves `index.html`
-   for every path, so `/s/abc123` and `/dashboard` work on refresh.
-   ([`wrangler.jsonc`](wrangler.jsonc) is only used if you choose Cloudflare *Workers* static assets
-   instead, via `npx wrangler deploy`.)
-6. In Supabase **Authentication → URL Configuration**, set **Site URL** to your `pages.dev` URL.
-7. Production checks: log in, activate a survey, scan the QR with a phone on mobile data (not your
+   After adding or changing them, trigger a new build (push a commit, or **Deployments → Retry build**).
+   If the live site shows "Supabase is not configured", the build did not see these variables.
+6. Routing needs no extra setup: `wrangler.jsonc` sets `not_found_handling: "single-page-application"`,
+   so `/s/abc123` and `/dashboard` work when opened directly or refreshed.
+7. In Supabase **Authentication → URL Configuration**, set **Site URL** to your `*.workers.dev`
+   (or custom) URL.
+8. Production checks: log in, activate a survey, scan the QR with a phone on mobile data (not your
    Wi-Fi), submit, and confirm the response count and results update.
+
+**Using Cloudflare Pages instead?** Create → **Pages** → Connect to Git, build command
+`npm run build`, output directory `dist`, and the same two variables under the Pages project's
+environment variables. Pages ignores `wrangler.jsonc` and serves `index.html` for unknown paths by
+default.
+
+**"This project is disconnected from your Git account"** means Cloudflare lost access to the GitHub
+repo, so pushes stop deploying. Fix it on Cloudflare: the Worker's **Settings → Build → Git
+repository → Manage**. Or on GitHub: https://github.com/settings/installations → **Cloudflare
+Workers and Pages** → **Configure**, then make sure the repo is allowed under *Repository access*. If
+that doesn't help, uninstall the app there and reconnect the repository from Cloudflare (**Connect**
+under Git repository), which reinstalls it.
 
 ### Giving the grader instructor access (without committing credentials)
 

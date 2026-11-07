@@ -227,12 +227,12 @@ All of the above (except creating the project) is in
 
 # Phase 15 — Deployment
 
-- [ ] Push the project to GitHub. **(you)**
-- [ ] Create the Cloudflare Pages site. **(you)**
-- [ ] Connect Cloudflare Pages to the GitHub repository. **(you)**
+- [x] Push the project to GitHub. (github.com/JGrade2005/poll-app)
+- [x] Create the Cloudflare Pages site. (Created as a Cloudflare Worker named `poll-app`, Cloudflare's current default; see README section 3.)
+- [ ] Connect Cloudflare Pages to the GitHub repository. **(you)** Cloudflare reports the Git connection as disconnected; reconnect it (README section 3).
 - [ ] Configure production environment variables. **(you)** `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`
 - [ ] Deploy the application. **(you)**
-- [x] Configure SPA routing. (Cloudflare Pages serves `index.html` by default; `wrangler.jsonc` covers Workers.)
+- [x] Configure SPA routing. (`wrangler.jsonc`: `not_found_handling: "single-page-application"`; Pages does this by default.)
 - [ ] Verify production login. **(you)**
 - [ ] Verify QR codes point to the production URL. **(you)**
 - [ ] Test student submissions in production. **(you)**

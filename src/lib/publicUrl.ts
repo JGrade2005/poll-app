@@ -1,4 +1,4 @@
-/** Base URL students use, e.g. https://classroom-survey.pages.dev */
+/** Base URL students use, e.g. https://poll-app.<subdomain>.workers.dev */
 export function publicSiteUrl(): string {
   const configured = import.meta.env.VITE_PUBLIC_SITE_URL as string | undefined
   const base = configured && configured.trim() !== '' ? configured : window.location.origin

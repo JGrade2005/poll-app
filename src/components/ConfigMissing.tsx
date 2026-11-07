@@ -15,8 +15,8 @@ export function ConfigMissing() {
             <code className="font-mono">npm run dev</code>.
           </li>
           <li>
-            Cloudflare Pages: add both variables under Settings → Variables and Secrets, then
-            redeploy.
+            Cloudflare: add both as build variables (Settings → Build → Variables and secrets), then
+            rebuild. Vite reads them at build time.
           </li>
         </ul>
       </div>

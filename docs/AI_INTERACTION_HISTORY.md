@@ -103,10 +103,18 @@ transcript can also be exported from the Claude desktop app if the full conversa
   It renamed the setting to `VITE_SUPABASE_PUBLISHABLE_KEY` (still accepting the old name), and
   updated `.env.example`, `.env.local`, the README and the docs.
 
+- **Cloudflare warnings** (pasted from the dashboard): "This project is disconnected from your Git
+  account" and "Update wrangler.jsonc … `"name": "poll-app"`". The agent read Cloudflare's Workers
+  Builds docs. The project had been created as a **Worker** (Cloudflare's new default), and Workers
+  Builds requires the `name` in `wrangler.jsonc` to match the dashboard name. The agent renamed it
+  from `classroom-survey` to `poll-app`, and pinned `packageManager` to the local npm version so
+  `npm ci` on Cloudflare doesn't reject the lockfile. It rewrote README section 3 for Workers (build
+  variables must be set for the *build*) and documented how to reconnect the GitHub app.
+
 ### Steps left for the student
 
 1. Create the Supabase project, run the migration, disable sign-ups, create instructor + grader users.
 2. Create the GitHub repository and push.
-3. Connect Cloudflare Pages, set the two environment variables, deploy.
+3. Reconnect the Cloudflare Worker to GitHub, set the two build variables, deploy.
 4. Test in production from a phone; take the database screenshots.
 5. Personalize `docs/DEVELOPMENT_SUMMARY.md`; submit the URLs and grader credentials via HuskyCT.
